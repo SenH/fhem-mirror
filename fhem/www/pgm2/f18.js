@@ -737,7 +737,7 @@ f18_setCss(why)
   style += ".col_bg, textarea, input, option "+bg(col("bg"));
   style += ".col_link,a:not(.changed),.handle,.fhemlog,input[type=submit],"+
            "select,div.ui-widget-content a "+
-           "{color:#"+col("link")+"!important; stroke:#"+col("link")+";}\n";
+           "{color:#"+col("link")+"!important; }\n";
   style += "svg:not([fill]):not(.jssvg) { fill:#"+col("link")+"; }\n";
   style += ".col_evenrow, table.block,div.block "+bg(col("evenrow"));
   style += ".col_oddrow,table.block tr.odd,table.block tr.sel "+
