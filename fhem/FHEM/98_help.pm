@@ -72,7 +72,8 @@ sub CommandHelp {
       $output = $outputInfo.$output;
 
     } else {
-      $output = "<br/><b>Internal command:</b> $mod";
+      $output = "<br/><b>Internal command:</b> ";
+      $output .= $mod if ( !$cl  or $cl->{TYPE} ne 'telnet' );
 	  my $i;
 	  my $f = "$modPath/docs/commandref_frame$lang.html";
       my $skip = 1;
@@ -92,7 +93,7 @@ sub CommandHelp {
 	}
 
     if( $cl  && $cl->{TYPE} eq 'telnet' ) { # telnet output      
-    $output =~ s/<br\s*\?>/\n/ig;
+    $output =~ s/<br\s*\/?>/\n/ig;
     $output =~ s/\s*<li>\s*/\n- /ig;
     $output =~ s/<\/?ul>/\n/ig;
     $output =~ s/<\/?[^>]+>//g;
@@ -302,7 +303,7 @@ sub cref_findInfo {
          <ul>
          <li>valid parameter &lt;language&gt; given</li>
          <li>global attribute language</li>
-         <li>nothing founde: return english</li>
+         <li>nothing found: return english</li>
          </ul>
       </li>
     </ul>
