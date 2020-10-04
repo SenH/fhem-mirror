@@ -280,9 +280,6 @@ sub VIERA_Define($$) {
   if (defined($value)) {$hash->{helper}{session_hmac_key} = decode_base64($value)}
      else {$hash->{helper}{session_hmac_key} = "None"}
   
-
-  CommandAttr(undef,$name." webCmd on_off") if( !defined( AttrVal($hash->{NAME}, "webCmd", undef)) );
-  
   BlockingKill($hash->{helper}{RUNNING_PID_GET}) if(defined($hash->{helper}{RUNNING_PID_GET}));
   delete($hash->{helper}{RUNNING_PID_GET});
   
