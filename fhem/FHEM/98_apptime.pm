@@ -79,11 +79,9 @@ sub HandleTimeout() {
       $fnname = $cv->GV->NAME;
     }
     $arg = $at->{ARG};
-    $shortarg = (defined($arg)?$arg:"_");
-    $shortarg = "HASH_unnamed" if (   (ref($shortarg) eq "HASH")
-                                   && !defined($shortarg->{NAME}) );
-    ($shortarg,undef) = split(/:|;/,$shortarg,2); # for special long args with delim ;
-    apptime_getTiming("global","tmr-".$fnname.";".$shortarg, $fn, $tim, $arg); # this can delete a timer and can add a timer
+    my $argname = 'unnamed';
+    $argname = $arg->{NAME} if (ref($arg) eq "HASH" && defined($arg->{NAME}));
+    apptime_getTiming("global","tmr-".$fnname.";".$argname, $fn, $tim, $arg); # this can delete a timer and can add a timer
     $nd++;
 
   }
@@ -99,11 +97,11 @@ sub HandleTimeout() {
 
     $cv = svref_2object($entry->{fn});
     $fnname = $cv->GV->NAME;
-    $shortarg = (defined($entry->{arg})?$entry->{arg}:"");
-    $shortarg = "HASH_unnamed" if (   (ref($shortarg) eq "HASH")
-                                   && !defined($shortarg->{NAME}) );
-    ($shortarg,undef) = split(/:|;/,$shortarg,2);
-    apptime_getTiming("global","nice-".$fnname.";".$shortarg, $entry->{fn}, $now, $entry->{arg});
+
+    $arg = $entry->{arg};
+    my $argname = 'unnamed';
+    $argname = $arg->{NAME} if (ref($arg) eq "HASH" && defined($arg->{NAME}));
+    apptime_getTiming("global","nice-".$fnname.";".$argname, $entry->{fn}, $now, $entry->{arg});
 
     $nextat = 1 if(%prioQueues);
   }
