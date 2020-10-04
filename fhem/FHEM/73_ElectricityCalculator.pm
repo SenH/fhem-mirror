@@ -95,7 +95,7 @@ sub ElectricityCalculator_Define($$$)
 	$hash->{REGEXP} = $RegEx;	
 
 	### Writing values to global hash
-	notifyRegexpChanged($hash, $RegEx);
+	notifyRegexpChanged($hash, "global");
 	$hash->{NAME}							= $name;
 	$hash->{STATE}              			= "active";
 	$hash->{REGEXP}             			= $RegEx;
@@ -124,9 +124,6 @@ sub ElectricityCalculator_Define($$$)
 	### For debugging purpose only
 	Log3 $name, 5, $name. " : ElectricityCalculator - RegEx                     : " . $RegEx;
 	
-	### Defining notify trigger
-	notifyRegexpChanged($hash, $RegEx);
-		
 	### Writing log entry
 	Log3 $name, 5, $name. " : ElectricityCalculator - Starting to define module";
 
@@ -418,6 +415,12 @@ sub ElectricityCalculator_Notify($$)
 		return undef;
 	}
 	
+	## Optimize notify trigger
+	if($ElectricityCountName eq "global" && grep(m/^INITIALIZED|REREADCFG$/, @{$ElectricityCountNameEvents}))
+	{
+		notifyRegexpChanged($ElectricityCalcDev, "global|${RegEx}");
+	}
+
 	### Check whether all required attributes has been provided and if not, create them with standard values
 	if(!defined($attr{$ElectricityCalcName}{BasicPricePerAnnum}))
 	{
