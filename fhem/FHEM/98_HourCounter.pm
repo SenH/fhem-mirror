@@ -261,6 +261,8 @@ sub HourCounter_Define($$$)
   $modules{HourCounter}{defptr}{$name} = $hash;
   RemoveInternalTimer($name);
 
+  notifyRegexpChanged($hash, "$onRegexp|$offRegexp");
+
   # wait until alle readings have been restored
   InternalTimer( int( gettimeofday() + 15 ), "HourCounter_Run", $name, 0 );
   return undef;
