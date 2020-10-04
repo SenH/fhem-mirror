@@ -252,6 +252,7 @@ readingsProxy_Set($@)
   my $v = join(" ", @a);
   my $set_fn = AttrVal( $hash->{NAME}, "setFn", "" );
   if( $set_fn =~ m/^{.*}$/s ) {
+    my $SELF = $hash->{NAME};
     my $CMD = $a[0];
     my $DEVICE = $hash->{DEVICE};
     my $READING = $hash->{READING};
@@ -302,6 +303,7 @@ readingsProxy_Get($@)
   my $v = join(" ", @a);
   my $get_fn = AttrVal( $hash->{NAME}, "getFn", "" );
   if( $get_fn =~ m/^{.*}$/s ) {
+    my $SELF = $hash->{NAME};
     my $CMD = $a[0];
     my $DEVICE = $hash->{DEVICE};
     my $READING = $hash->{READING};
@@ -334,6 +336,7 @@ readingsProxy_Attr($$$;$)
   if( $cmd eq "set" ) {
     if( $attrName eq 'getFn' || $attrName eq 'setFn' || $attrName eq 'valueFn' ) {
       my %specials= (
+        "%SELF" => $name,
         "%CMD" => $name,
         "%DEVICE" => $name,
         "%READING" => $name,
