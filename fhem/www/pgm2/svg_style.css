@@ -1,6 +1,9 @@
 .background { fill:#FFFFE7; }
 
-text       { font-family:Times; font-size:12px; }
+/*Display pointer cursor for links*/
+a { fill:#278727; cursor:pointer; }
+/*Set font to match f18 style*/
+text       { font-family: Arial, sans-serif; font-size:12px; }
 text.title { font-size:16px; }
 text.legend { cursor:pointer; }
 text.copy  { text-decoration:underline; stroke:none; fill:blue; cursor:pointer;}
