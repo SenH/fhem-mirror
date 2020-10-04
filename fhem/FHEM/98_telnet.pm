@@ -185,9 +185,11 @@ telnet_Read($)
         if( AttrVal($name, "encoding", "") ); #DO BINARY
     $chash->{CD}->flush();
     my $auth = Authenticate($chash, undef);
-    syswrite($chash->{CD}, sprintf("%c%c%cPassword: ", 255, 251, 1)) # WILL ECHO
-        if($auth);
-    $chash->{Authenticated} = 0 if(!$auth);
+    if($auth) {
+      syswrite($chash->{CD}, "\e[0mPassword: \e[8m"); # CSI SGR conceal
+    } else {
+      $chash->{Authenticated} = 0;
+    }
     return;
   }
 
@@ -225,9 +227,9 @@ telnet_Read($)
     $hash->{BUF} = $rest;
 
     if(!defined($hash->{Authenticated})) {
-      syswrite($hash->{CD}, sprintf("%c%c%c\r\n", 255, 252, 1)); # WONT ECHO
-
+      syswrite($hash->{CD}, "\e[0m"); # CSI SGR normal
       if(Authenticate($hash, $cmd) != 2) {
+        syswrite($hash->{CD}, "OK\r\n");
         $hash->{Authenticated} = 1;
         next;
       } else {
@@ -252,6 +254,9 @@ telnet_Read($)
           undef($hash->{prevlines});
         }
         $cmd = latin1ToUtf8($cmd) if( $hash->{encoding} eq "latin1" );
+        if (IsDevice($hash->{SNAME})) {
+          readingsSingleUpdate($defs{$hash->{SNAME}}, 'lastCommand', $hash->{NAME}.': '.$cmd, 1);
+        }
         $ret = AnalyzeCommandChain($hash, $cmd);
         push @ret, $ret if(defined($ret));
       }
