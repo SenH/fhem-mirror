@@ -547,6 +547,7 @@ sub Modbus_Define($$)
     $ioHash->{DeviceName} = $dev;           # needed by DevIo to get Device, Port, Speed etc.       
     $ioHash->{IODev}      = $ioHash;        # point back to self to make getIOHash easier 
     $ioHash->{SerialConn} = 1;
+    $ioHash->{NOTIFYDEV}  = "global";       # NotifyFn nur aufrufen wenn global events (INITIALIZED etc.)
     
     Modbus_Close($ioHash, 1);               # close, set Expect, clear Buffer, but don't set state to disconnected 
 
