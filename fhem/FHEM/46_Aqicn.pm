@@ -291,13 +291,9 @@ sub Attr(@) {
     if ( $attrName eq "interval" ) {
         if ( $cmd eq "set" ) {
             if ( $attrVal < 30 ) {
-                Log3 $name, 3,
-"Aqicn ($name) - interval too small, please use something >= 30 (sec), default is 300 (sec)";
-                return
-"interval too small, please use something >= 30 (sec), default is 300 (sec)";
-
-            }
-            else {
+                Log3 $name, 3, "Aqicn ($name) - interval too small, please use something >= 30 (sec), default is 300 (sec)";
+                return "interval too small, please use something >= 30 (sec), default is 300 (sec)";
+            } else {
                 RemoveInternalTimer($hash);
                 $hash->{INTERVAL} = $attrVal;
                 Log3 $name, 3, "Aqicn ($name) - set interval to $attrVal";
