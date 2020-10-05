@@ -5,6 +5,8 @@ package main;
 use strict;
 use warnings;
 use IO::File;
+use Cwd;
+use File::Basename;
 
 # This block is only needed when FileLog is loaded bevore FHEMWEB
 sub FW_pO(@);
@@ -672,6 +674,16 @@ FileLog_logWrapper($)
     my $suffix = "</pre>".($FW_ss ? "</div>" : "")."</div>";
 
     my $reverseLogs = AttrVal($FW_wname, "reverseLogs", 0);
+
+    my $abs_path    = Cwd::abs_path($path);
+    my $allowed_dir = Cwd::abs_path(dirname($defs{$d}{logfile}));
+    if ( $abs_path !~ qr{^$allowed_dir}xms ) {
+        my $msg = qq{FileLog_logWrapper - '$abs_path' is not allowed};
+        Log3(undef, 0, $msg);
+        FW_addContent(qq{>Path is not allowed</div></body></html});
+        return 0;
+    }
+
     if(!$reverseLogs) {
       $suffix .= "</body></html>";
       return FW_returnFileAsStream($path, $suffix, "text/html", 1, 0);
