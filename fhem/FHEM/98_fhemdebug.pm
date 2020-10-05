@@ -115,12 +115,35 @@ fhemdebug_timerList($)
   for my $h (@intAtA) {
     my $tt = $h->{TRIGGERTIME};
     my $fnName = $h->{FN};
+
     if(ref($fnName) ne "") {
       my $cv = svref_2object($fnName);
       $fnName = $cv->GV->NAME if($cv); # get function name
     }
-    push(@res, sprintf("%s.%05d %s%s",
-      FmtDateTime($tt), int(($tt-int($tt))*100000), $fnName,
+
+    # get device name
+    my $args = $h->{ARG};
+    my $type = ref($args);
+    my $device = '';
+
+    if ($type eq 'HASH' && defined($args->{NAME})) {
+      $device = $args->{NAME};
+    } elsif ($type eq 'HASH' && ref($args->{hash}) eq 'HASH' && defined($args->{hash}->{NAME})) {
+      $device = $args->{hash}->{NAME};
+    } elsif ($type eq 'REF' && ref($$args->{hash}) eq 'HASH' && defined($$args->{hash}->{NAME})) {
+      $device = $$args->{hash}->{NAME};
+    } elsif ($type eq 'ARRAY' && ref(@$args[0]) eq 'HASH' && defined(@$args[0]->{NAME})) {
+      $device = @$args[0]->{NAME};
+    } elsif ($type eq '' && $args ne '' && $args ne '0') {
+      $device = $args;
+    } else {
+      $device = '';
+    }
+
+    $device = ' ('.$device.')' if ($device ne '');
+
+    push(@res, sprintf("%s.%05d %s%s%s",
+      FmtDateTime($tt), int(($tt-int($tt))*100000), $fnName, $device,
       $h->{STACKTRACE} ? $h->{STACKTRACE} : ""));
   }
   return join("\n", @res);
