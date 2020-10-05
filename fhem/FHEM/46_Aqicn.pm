@@ -413,7 +413,7 @@ sub GetData($;$) {
 
     my $param = {
         url       => "https://" . $uri,
-        timeout   => 5,
+        timeout   => 30,
         method    => 'GET',
         hash      => $hash,
         doTrigger => 1,
