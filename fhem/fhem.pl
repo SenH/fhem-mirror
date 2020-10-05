@@ -5670,7 +5670,6 @@ addStructChange($$$)
   $lastDefChange++;
   shift @structChangeHist
           if(@structChangeHist > AttrVal('global', 'maxChangeLog', 10) - 1);
-  $param = substr($param, 0, 40)."..." if(length($param) > 40);
   push @structChangeHist, "$cmd $param";
 }
 
