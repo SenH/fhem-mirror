@@ -1713,68 +1713,54 @@ FW_roomOverview($)
 
   FW_pO "<div id=\"menu\">";
   FW_pO "<table>";
-  if($FW_ss) {  # Make a selection sensitive dropdown list
-    FW_pO "<tr><td><select OnChange=\"location.href=" .
-                              "this.options[this.selectedIndex].value\">";
-    foreach(my $idx = 0; $idx < @list1; $idx++) {
-      next if(!$list1[$idx]);
-      my $sel = ($list1[$idx] eq $FW_room ? " selected=\"selected\""  : "");
-      FW_pO "<option value='$list2[$idx]'$sel>$list1[$idx]</option>";
-    }
-    FW_pO "</select></td>";
-    FW_pO "</tr>";
-
-  } else {
-
-    my $tblnr = 1;
-    my $roomEscaped = FW_htmlEscape($FW_room);
-    my $current;
-    $current = "$FW_ME?room=".urlEncode($FW_room) if($FW_room);
-    $current = "$FW_ME?cmd=".urlEncode($cmd) if($cmd);
-    foreach(my $idx = 0; $idx < @list1; $idx++) {
-      my ($l1, $l2) = ($list1[$idx], $list2[$idx]);
-      if(!$l1) {
-        FW_pO "</table></td></tr>" if($idx);
-        if($idx<int(@list1)-1) {
-          FW_pO "<tr><td><table class=\"room roomBlock$tblnr\">";
-          $tblnr++;
-        }
-
-      } else {
-        FW_pF "<tr%s>", ($current && $current eq $l2) ? " class=\"sel\"" : "";
-
-        my $class = "menu_$l1";
-        $class =~ s/[^A-Z0-9]/_/gi;
-
-        # image tag if we have an icon, else empty
-        my $icoName = "ico$l1";
-        map { my ($n,$v) = split(":",$_); $icoName=$v if($l1 =~ m/^$n$/); }
-                        split(" ", AttrVal($FW_wname, "roomIcons", ""));
-        my $icon = FW_iconName($icoName) ?
-                        FW_makeImage($icoName,$icoName,"icon")."&nbsp;" : "";
-
-        if($l1 eq "Save config") {
-          $l1 .= '</span></a> '.
-                  '<a id="saveCheck" class="changed" style="visibility:'.
-                  (int(@structChangeHist) ? 'visible' : 'hidden').'"><span>?';
-        }
-
-        # Force external browser if FHEMWEB is installed as an offline app.
-        my $target = '';        # Forum 33066, 39854
-        $target = 'target="_blank"' if($l2 =~ s/^$FW_ME\/\+/$FW_ME\//);
-        $target = 'target="_blank"' if($l2 =~ m/commandref|fhem.de.fhem.html/);
-        if($l2 =~ m/.html$/ || $l2 =~ m/^(http|javascript)/ || length($target)){
-           FW_pO "<td><div><a href='$l2' $target>$icon<span>$l1</span></a>".
-                 "</div></td>";
-        } else {
-          FW_pH $l2, "$icon<span>$l1</span>", 1, $class;
-        }
-
-        FW_pO "</tr>";
+  my $tblnr = 1;
+  my $roomEscaped = FW_htmlEscape($FW_room);
+  my $current;
+  $current = "$FW_ME?room=".urlEncode($FW_room) if($FW_room);
+  $current = "$FW_ME?cmd=".urlEncode($cmd) if($cmd);
+  foreach(my $idx = 0; $idx < @list1; $idx++) {
+    my ($l1, $l2) = ($list1[$idx], $list2[$idx]);
+    if(!$l1) {
+      FW_pO "</table></td></tr>" if($idx);
+      if($idx<int(@list1)-1) {
+        FW_pO "<tr><td><table class=\"room roomBlock$tblnr\">";
+        $tblnr++;
       }
-    }
 
+    } else {
+      FW_pF "<tr%s>", ($current && $current eq $l2) ? " class=\"sel\"" : "";
+
+      my $class = "menu_$l1";
+      $class =~ s/[^A-Z0-9]/_/gi;
+
+      # image tag if we have an icon, else empty
+      my $icoName = "ico$l1";
+      map { my ($n,$v) = split(":",$_); $icoName=$v if($l1 =~ m/^$n$/); }
+                      split(" ", AttrVal($FW_wname, "roomIcons", ""));
+      my $icon = FW_iconName($icoName) ?
+                      FW_makeImage($icoName,$icoName,"icon")."&nbsp;" : "";
+
+      if($l1 eq "Save config") {
+        $l1 .= '</span></a> '.
+                '<a id="saveCheck" class="changed" style="visibility:'.
+                (int(@structChangeHist) ? 'visible' : 'hidden').'"><span>?';
+      }
+
+      # Force external browser if FHEMWEB is installed as an offline app.
+      my $target = '';        # Forum 33066, 39854
+      $target = 'target="_blank"' if($l2 =~ s/^$FW_ME\/\+/$FW_ME\//);
+      $target = 'target="_blank"' if($l2 =~ m/commandref|fhem.de.fhem.html/);
+      if($l2 =~ m/.html$/ || $l2 =~ m/^(http|javascript)/ || length($target)){
+         FW_pO "<td><div><a href='$l2' $target>$icon<span>$l1</span></a>".
+               "</div></td>";
+      } else {
+        FW_pH $l2, "$icon<span>$l1</span>", 1, $class;
+      }
+
+      FW_pO "</tr>";
+    }
   }
+
   FW_pO "</table>";
   FW_pO "</div>";
   FW_pO "</div>" if($hasMenuScroll);
