@@ -349,6 +349,7 @@ my @globalAttrList = qw(
   language:EN,DE
   lastinclude
   latitude
+  listNamePadding
   logdir
   logfile
   longitude
@@ -2503,6 +2504,7 @@ sub
 CommandList($$)
 {
   my ($cl, $param) = @_;
+  my $namefmt = '%-'.AttrVal('global', 'listNamePadding', 20).'s';
   my $str = "";
 
   if($param =~ m/^-r *(.*)$/i) {
@@ -2541,7 +2543,7 @@ CommandList($$)
       next if(IsIgnored($d) || ($cl && !Authorized($cl, "devicename", $d, 1)));
       my $t = $defs{$d}{TYPE};
       $str .= "\n$t:\n" if($t ne $lt);
-      $str .= sprintf("  %-20s (%s)\n", $d, $defs{$d}{STATE});
+      $str .= sprintf("  $namefmt (%s)\n", $d, $defs{$d}{STATE});
       $lt = $t;
     }
 
@@ -2568,13 +2570,13 @@ CommandList($$)
               $val = ($val->{NAME} ? $val->{NAME} : # ???
                       join(" ", map { "$_=$val->{$_}" } sort keys %{$val}));
             }
-            $str .= sprintf("%-20s %*s   %*s %s\n", ($first++==1)?$sdev:'',
+            $str .= sprintf("$namefmt %*s   %*s %s\n", ($first++==1)?$sdev:'',
                       $arg[2]?19:0, '', $arg[2]?-15:0, $arg[2]?$n:'', $val);
 
           } elsif($defs{$sdev}{READINGS} &&
                   defined($defs{$sdev}{READINGS}{$n})
                   && (!$fType || $fType eq "r:")) {
-            $str .= sprintf("%-20s %s   %*s %s\n", ($first++==1)?$sdev:'',
+            $str .= sprintf("$namefmt %s   %*s %s\n", ($first++==1)?$sdev:'',
                     $defs{$sdev}{READINGS}{$n}{TIME},
                     $arg[2]?-15:0, $arg[2]?$n:'', 
                     $defs{$sdev}{READINGS}{$n}{VAL});
@@ -2582,7 +2584,7 @@ CommandList($$)
           } elsif($attr{$sdev} && 
                   defined($attr{$sdev}{$n})
                   && (!$fType || $fType eq "a:")) {
-            $str .= sprintf("%-20s %*s   %*s %s\n",($first++==1)?$sdev:'',
+            $str .= sprintf("$namefmt %*s   %*s %s\n",($first++==1)?$sdev:'',
                       $arg[2]?19:0, '', $arg[2]?-15:0, $arg[2]?$n:'',
                       $attr{$sdev}{$n});
 
