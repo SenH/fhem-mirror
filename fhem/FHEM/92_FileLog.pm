@@ -542,7 +542,11 @@ FileLog_fhemwebFn($$$$)
   my $row = 0;
   my $ret = sprintf("<table class=\"FileLog %swide\">",
                         $pageHash ? "" : "block ");
-  foreach my $f (FW_fileList($defs{$d}{logfile})) {
+  my $limit = AttrVal($d, "logHistoryLimit", AttrVal($FW_wname, 'logHistoryLimit', 0));
+  my $i = 1;
+  my @arr = FW_fileList($defs{$d}{logfile});
+  @arr = reverse @arr if ($limit);
+  foreach my $f (@arr) {
     my $class = (!$pageHash ? (($row++&1)?"odd":"even") : "");
     $ret .= "<tr class=\"$class\">";
     $ret .= "<td><div class=\"dname\">$f</div></td>";
@@ -557,6 +561,7 @@ FileLog_fhemwebFn($$$$)
                     "<div class=\"dval\">$name</div>", 1, "dval", 1);
     }
     $ret .= "</tr>";
+    last if ($pageHash && $limit && $i++ >= $limit);
   }
   $ret .= "</table>";
   return $ret if($pageHash);
