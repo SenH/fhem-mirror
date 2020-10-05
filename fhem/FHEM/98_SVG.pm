@@ -1462,8 +1462,11 @@ SVG_render($$$$$$$$$$)
   my $title = ($conf{title} ? $conf{title} : " ");
   $title =~ s/</&lt;/g;
   $title =~ s/>/&gt;/g;
-  SVG_pO "<text id='svg_title' x='$off1' y='$off2' " .
-        "class='title' text-anchor='middle'>$title</text>";
+  # Create link for SVG title
+  # "xlink:href" instead of "href" is required for Safari
+  # https://forum.fhem.de/index.php/topic,29951.msg574371.html#msg574371
+  SVG_pO "<a target='_top' xlink:href='$FW_ME?detail=$name'><text id='svg_title' x='$off1' y='$off2' " .
+        "class='title' text-anchor='middle'>$title</text></a>";
 
   ######################
   # Left label = ylabel and right label = y2label
