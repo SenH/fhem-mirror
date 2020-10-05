@@ -830,42 +830,20 @@ sub HealthImplications($$) {
 
     my %HIen = (
         1 =>
-'Air quality is acceptable; however, for some pollutants there may be a moderate health concern for a very small number of people who are unusually sensitive to air pollution.',
+'Air quality is considered good. (0-50)',
         2 =>
-'Air quality is acceptable; however, for some pollutants there may be a moderate health concern for a very small number of people who are unusually sensitive to air pollution.',
+'Air quality is acceptable. (51-100)',
         3 =>
-'Members of sensitive groups may experience health effects. The general public is not likely to be affected.',
+'Active children, adults & people with respiratory disease, such as asthma should limit prolonged outdoor exertion. (101-150)',
         4 =>
-'Everyone may begin to experience health effects; members of sensitive groups may experience more serious health effects',
+'Everyone may begin to experience health effects. (151-200)',
         5 =>
-'Health warnings of emergency conditions. The entire population is more likely to be affected.',
-        6 => 'Health alert: everyone may experience more serious health effects'
+'Emergency alert! Everyone should avoid all outdoor exertion. (201-300)',
+        6 => 
+'Hazardous alert! Everyone should avoid all outdoor exertion. (300+)'
     );
 
-    my %HIde = (
-        1 =>
-'Die Qualität der Luft gilt als zufriedenstellend und die Luftverschmutzung stellt ein geringes oder kein Risiko dar',
-        2 =>
-'Die Luftqualität ist insgesamt akzeptabel. Bei manchen Schadstoffe besteht jedoch eventuell eine geringe Gesundheitsgefahr für einen sehr kleinen Personenkreis, der sehr empfindlich auf Luftverschmutzung ist.',
-        3 =>
-'Bei Mitgliedern von empfindlichen Personengruppen können gesundheitliche Auswirkungen auftreten. Die allgemeine Öffentlichkeit ist wahrscheinlich nicht betroffen.',
-        4 =>
-'Erste gesundheitliche Auswirkungen können sich bei allen Personen einstellen. Bei empfindlichen Personengruppen können ernstere gesundheitliche Auswirkungen auftreten.',
-        5 =>
-'Gesundheitswarnung aufgrund einer Notfallsituation. Die gesamte Bevölkerung ist voraussichtlich betroffen.',
-        6 =>
-'Gesundheitsalarm: Jeder muss mit dem Auftreten ernsterer Gesundheitsschäden rechnen'
-    );
-
-    return (
-        (
-                 AttrVal( 'global', 'language', 'none' ) eq 'DE'
-              or AttrVal( $name, 'language', 'none' ) eq 'de'
-        )
-          and AttrVal( $name, 'language', 'none' ) ne 'en'
-        ? $HIde{$apl}
-        : $HIen{$apl}
-    );
+    return $HIen{$apl};
 }
 
 1;
