@@ -1133,8 +1133,8 @@ sub EnOcean_Define($$) {
     #delete $hash->{helper}{adjust};
   }
 
-  # all notifys needed
-  #$hash->{NOTIFYDEV} = "global";
+  # FIXME Also add devices from attr observeRefDev
+  $hash->{NOTIFYDEV} = "global,${name}";
   Log3 $name, 5, "EnOcean_define for device $name executed.";
   return undef;
 }
