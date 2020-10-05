@@ -1382,17 +1382,19 @@ sub Pushover_SetMessage2 ($$$$) {
 }
 
 sub Pushover_CancelMessage ($$$$) {
-    my ( $hash, $cmd, $cancelIds, $h ) = @_;
+    my ( $hash, $cmd, $a, $h ) = @_;
     my $name    = $hash->{NAME};
     my $success = 0;
+    my $quiet = 0;
     my $return;
 
     return "Unknown argument, choose one of cancel_id"
-      if ( int(@$cancelIds) < 1 || $cancelIds[0] =~ /^(\?|help)$/i );
+      if ( int(@$a) < 1 || @$a[0] =~ /^(\?|help)$/i );
 
+    $quiet = 1 if ( int(@$a) > 1 && lc(@$a[1]) eq 'quiet' );
     Log3 $name, 5, "Pushover $name: called function Pushover_CancelMessage()";
 
-    foreach my $string (@$cancelIds) {
+    foreach my $string (@$a[0]) {
         foreach my $cancelId ( split( ',', $string ) ) {
             foreach my $key ( keys %{ $hash->{READINGS} } ) {
                 if (   $key =~ /^cbCancelId_(\d+)$/
@@ -1411,7 +1413,7 @@ sub Pushover_CancelMessage ($$$$) {
         }
     }
 
-    return "Invalid cancel_id" unless ($success);
+    return "Invalid cancel_id" if (!$success && !$quiet);
     return $return;
 }
 
