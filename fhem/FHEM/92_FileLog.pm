@@ -91,6 +91,7 @@ FileLog_dailySwitch($)
   my $t = time();
   my $off = fhemTzOffset($t);
   $t = 86400*(int(($t+$off)/86400)+1)+1-$off; # tomorrow, 1s after midnight
+  RemoveInternalTimer($hash, "FileLog_dailySwitch");
   InternalTimer($t, "FileLog_dailySwitch", $hash, 0);
 }
 
