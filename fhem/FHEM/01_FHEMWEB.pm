@@ -802,7 +802,7 @@ FW_answerCall($)
 
   $MW_dir = "$attr{global}{modpath}/FHEM";
   $FW_sp = AttrVal($FW_wname, "stylesheetPrefix", "f18");
-  $FW_ss = ($FW_sp =~ m/smallscreen/);
+  $FW_ss = ($FW_sp =~ m/smallscreen/ || $FW_userAgent =~ m/(iPhone|iPad|iPod)/);
   $FW_tp = ($FW_sp =~ m/smallscreen|touchpad/);
   my $spDir = ($FW_sp eq "default" ? "" : "$FW_sp:");
   @FW_iconDirs = grep { $_ } split(":", AttrVal($FW_wname, "iconPath",
@@ -889,7 +889,7 @@ FW_answerCall($)
 
 
   $FW_plotmode = AttrVal($FW_wname, "plotmode", "SVG");
-  $FW_plotsize = AttrVal($FW_wname, "plotsize", $FW_ss ? "480,160" :
+  $FW_plotsize = AttrVal($FW_wname, "plotsize", $FW_ss ? "394,160" :
                                                 $FW_tp ? "640,160" : "800,160");
   my ($cmd, $cmddev) = FW_digestCgi($arg);
   if($cmd && $FW_CSRF && $cmd !~ m/style (list|select|eventMonitor)/) {
