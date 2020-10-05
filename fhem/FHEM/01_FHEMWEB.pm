@@ -1214,8 +1214,25 @@ FW_addLinks($)
 {
   my ($txt) = @_;
   return undef if(!defined($txt));
-  $txt =~ s,\b([a-z0-9._]+)\b,
-            $defs{$1} ? "<a href='$FW_ME$FW_subdir?detail=$1'>$1</a>" : $1,gei;
+
+  sub getDefLinks {
+    my $capture = shift;
+    if ($defs{$capture}) {
+      return "<a href='$FW_ME$FW_subdir?detail=$capture'>$capture</a>";
+    }
+
+    my @list = split(/_/, $capture);
+    my $last = pop(@list); # chop last element
+    my $first = join('_', @list);
+
+    if ($defs{$first}) {
+      return "<a href='$FW_ME$FW_subdir?detail=$first'>$first</a>_$last";
+    } else {
+      return $capture;
+    }
+  }
+
+  $txt =~ s,\b([a-z0-9._]+)\b,getDefLinks($1),gei;
   return $txt;
 }
 
