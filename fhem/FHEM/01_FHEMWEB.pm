@@ -2345,6 +2345,8 @@ FW_fileNameToPath($)
   my $cfgFileName = $1;
   if($name eq $cfgFileName) {
     return $attr{global}{configfile};
+  } elsif($name =~ m/fhem_.*.cfg$/) {
+    return $name;
   } elsif($name =~ m/.*(js|css|_defs.svg)$/) {
     return "$FW_cssdir/$name";
   } elsif($name =~ m/.*(png|svg)$/) {
@@ -2384,11 +2386,6 @@ FW_style($$)
   if($a[1] eq "list") {
     FW_addContent($start);
     FW_pO "$msg<br><br>" if($msg);
-
-    $attr{global}{configfile} =~ m,([^/]*)$,;
-    my $cfgFileName = $1;
-    FW_displayFileList("config file", $cfgFileName)
-                                if(!configDBUsed());
 
     my $efl = AttrVal($FW_wname, 'editFileList',
       "Own modules and helper files:\$MW_dir:^(.*sh|[0-9][0-9].*Util.*pm|".
