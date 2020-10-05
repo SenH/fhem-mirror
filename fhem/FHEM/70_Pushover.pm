@@ -1142,6 +1142,9 @@ sub Pushover_SetMessage2 ($$$$) {
           $h->{sound} ? $h->{sound} : AttrVal( $hash->{NAME}, "sound", undef );
         $values{timestamp} = ( $h->{timestamp} ? $h->{timestamp} : undef );
 
+        $values{monospace} =
+          $h->{monospace} ? 1 : AttrVal( $name, "monospace", undef );
+
         $values{cancel_id} = $h->{cancel_id}
           if ( defined( $h->{cancel_id} )
             && $values{priority}
