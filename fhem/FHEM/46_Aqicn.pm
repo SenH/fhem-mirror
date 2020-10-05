@@ -381,6 +381,7 @@ sub Timer_GetData($) {
         readingsSingleUpdate( $hash, 'state', 'disabled', 1 );
     }
 
+    RemoveInternalTimer($hash);
     InternalTimer( gettimeofday() + $hash->{INTERVAL},
         'Aqicn::Timer_GetData', $hash );
     Log3 $name, 4, "Aqicn ($name) - Call InternalTimer Timer_GetData";
