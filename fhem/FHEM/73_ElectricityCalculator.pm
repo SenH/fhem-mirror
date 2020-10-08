@@ -787,8 +787,8 @@ sub ElectricityCalculator_Notify($$)
 		my $ElectricityCountReadingTimestampDelta = $ElectricityCountReadingTimestampCurrentRelative - $ElectricityCountReadingTimestampPreviousRelative;
 		Log3 $ElectricityCalcName, 5, $ElectricityCalcName. " : ElectricityCalculator - ElectricityCountReadingTimestampDelta            : " . $ElectricityCountReadingTimestampDelta . " s";
 
-		### Continue with calculations only if time difference is larger than 1 seconds to avoid "Illegal division by zero" and erroneous due to small values for divisor
-		if ($ElectricityCountReadingTimestampDelta > 1)
+		### Continue with calculations only if time difference is not 0 to avoid "Illegal division by zero"
+		if ($ElectricityCountReadingTimestampDelta != 0)
 		{
 			### Calculate DW (electric Energy difference) of previous and current value / [kWh]
 			my $ElectricityCountReadingValueDelta = sprintf($ElectricityCalcDev->{system}{DecimalPlace}, ($ElectricityCountReadingValueCurrent)) - sprintf($ElectricityCalcDev->{system}{DecimalPlace}, ($ElectricityCountReadingValuePrevious));
@@ -997,8 +997,6 @@ sub ElectricityCalculator_Notify($$)
 			<code>&lt;DestinationDevice&gt;_&lt;SourceCounterReading&gt;_CounterMeter1st</code><BR>
 			must be corrected with real values by using the <code>setreading</code> - command.<BR>
 			These real values may be found on the last electricity bill. Otherwise it will take 24h for the daily, 30days for the monthly and up to 12 month for the yearly values to become realistic.<BR>
-			<BR>
-			Intervalls smaller than 10s will be discarded to avoid peaks due to fhem blockages (e.g. DbLog - reducelog).
 			<BR>
 		</td>
 	</tr>
@@ -1582,8 +1580,6 @@ sub ElectricityCalculator_Notify($$)
 			entsprechend mit dem <code>setreading</code> - Befehl korrigiert werden.<BR>
 			Diese Werte findet man unter Umst&auml;nden auf der letzten Abrechnung des Elektrizit&auml;tsversorgers. Andernfalls dauert es bis zu 24h f&uuml;r die t&auml;glichen, 30 Tage f&uuml;r die monatlichen und bis zu 12 Monate f&uuml;r die j&auml;hrlichen Werte bis diese der Realit&auml;t entsprechen.<BR>
 			<BR>
-			<BR>
-			Intervalle kleienr als 10s werden ignoriert um Spitzen zu verhindern die von Blockaden des fhem Systems hervorgerufen werden (z.B. DbLog - reducelog).
 		</td>
 	</tr>
 </table>
